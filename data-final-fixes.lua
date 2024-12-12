@@ -1,6 +1,10 @@
 local global_multiplier = settings.startup["global-multiplier"].value
 local essential_research_multiplier = settings.startup["essential-research-multiplier"].value
 local infinite_research_multiplier = settings.startup["infinite-research-multiplier"].value
+local interplanetary_research_multiplier = settings.startup["interplanetary-research-multiplier"].value
+local planet_discovery_research_multiplier = settings.startup["planet-discovery-research-multiplier"].value
+
+local multiplier_mode = "override";
 
 -- as defined by Factorio's technology tree; yes, some of this is redundant as they're trigger-based, but I would rather be technically correct
 local essential_research = {
@@ -23,22 +27,102 @@ local essential_research = {
     "promethium-science-pack",
 };
 
+-- used for 'pack' multiplier mode
+local science_packs = {
+    "automation-science-pack",
+    "logistic-science-pack",
+    "military-science-pack",
+    "chemical-science-pack",
+    "production-science-pack",
+    "utility-science-pack",
+    "space-science-pack",
+    "metallurgic-science-pack",
+    "electromagnetic-science-pack",
+    "agricultural-science-pack",
+    "cryogenic-science-pack",
+    "promethium-science-pack",
+}
+
+-- used for detecting interplanetary research
+local interplanetary_science_packs = {
+    "metallurgic-science-pack",
+    "electromagnetic-science-pack",
+    "agricultural-science-pack",
+    "cryogenic-science-pack",
+    "promethium-science-pack",
+}
+
+function is_essential_research(name)
+    for _, essential_name in pairs(essential_research) do
+        if (name == essential_name) then
+            return true;
+        end
+    end
+    return false;
+end
+
+-- infinite research generally has a finite number of defined 'levels', ones that don't have a formula. this function does not account for them.
+function is_infinite_research(name)
+    return data.raw.technology[name].unit.count == nil;
+end
+
+function is_interplanetary_research(name)
+    return false;
+end
+
+function is_planet_discovery_research(name)
+    local start = string.find(name, "planet-discovery-", 1, true)
+    return start == 1;
+end
+
+function multiply(current, next)
+    if multiplier_mode == "override" then
+        return next;
+    elseif multiplier_mode == "multiply" then
+        return current * next;
+    elseif multiplier_mode == "add" then
+        return current + (next - 1);
+    end
+end
+
 for name, technology in pairs(data.raw.technology) do
     -- skip trigger technology
     if (technology.research_trigger ~= nil) then
         goto continue;
     end
 
+    -- default to the global multiplier
     local multiplier = global_multiplier;
 
+    -- essential research
+    if (essential_research_multiplier ~= 1 and is_essential_research(name)) then
+        multiplier = multiply(multiplier, essential_research_multiplier);
+    end
+
+    -- infinite research
+    if (infinite_research_multiplier ~= 1 and is_infinite_research(name)) then
+        multiplier = multiply(multiplier, infinite_research_multiplier);
+    end
+
+    -- interplanetary research
+    if (interplanetary_research_multiplier ~= 1 and is_interplanetary_research(name)) then
+        multiplier = multiply(multiplier, interplanetary_research_multiplier);
+    end
+
+    -- planet discovery research
+    if (planet_discovery_research_multiplier ~= 1 and is_planet_discovery_research(name)) then
+        multiplier = multiply(multiplier, planet_discovery_research_multiplier);
+    end
+
+    -- TODO: science pack multiplier
+
+-- debug printing
     if (technology.unit) then
         if (technology.unit.count ~= nil) then
             log(name .. " : " .. technology.unit.count .. " -> x" .. multiplier)
         else
             log(name .. " : " .. '??' .. " -> x" .. multiplier)
         end
-    else
-        log(name .. " : trigger=" .. technology.research_trigger.type)
     end
 
     -- TODO: Reduce multiplier precision to 3 decimal places
