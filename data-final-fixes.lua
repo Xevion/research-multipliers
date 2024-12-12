@@ -1,10 +1,67 @@
+local is_space_age_available = mods['space-age'] ~= nil
+
+local multiplier_mode = "override";
+
 local global_multiplier = settings.startup["global-multiplier"].value
 local essential_research_multiplier = settings.startup["essential-research-multiplier"].value
 local infinite_research_multiplier = settings.startup["infinite-research-multiplier"].value
-local interplanetary_research_multiplier = settings.startup["interplanetary-research-multiplier"].value
-local planet_discovery_research_multiplier = settings.startup["planet-discovery-research-multiplier"].value
 
-local multiplier_mode = "override";
+local interplanetary_research_multiplier = 1;
+local planet_discovery_research_multiplier = 1;
+if is_space_age_available then
+    interplanetary_research_multiplier = settings.startup["interplanetary-research-multiplier"].value
+    planet_discovery_research_multiplier = settings.startup["planet-discovery-research-multiplier"].value
+end
+
+local science_pack_multiplier_ids = {
+    "automation-science-multiplier",
+    "logistic-science-multiplier",
+    "military-science-multiplier",
+    "chemical-science-multiplier",
+    "production-science-multiplier",
+    "utility-science-multiplier",
+    "space-science-multiplier",
+};
+
+if is_space_age_available then
+    for _, id in pairs({
+        "metallurgic-science-multiplier",
+        "electromagnetic-science-multiplier",
+        "agricultural-science-multiplier",
+        "cryogenic-science-multiplier",
+        "promethium-science-multiplier",
+    }) do
+        table.insert(science_pack_multiplier_ids, id);
+    end
+end
+
+local science_pack_multipliers = {};
+for _, id in pairs(science_pack_multiplier_ids) do
+    science_pack_multipliers[id] = settings.startup[id].value;
+end
+
+local science_pack_multiplier_translation = {
+    ["automation-science-pack"] = "automation-science-multiplier",
+    ["logistic-science-pack"] = "logistic-science-multiplier",
+    ["military-science-pack"] = "military-science-multiplier",
+    ["chemical-science-pack"] = "chemical-science-multiplier",
+    ["production-science-pack"] = "production-science-multiplier",
+    ["utility-science-pack"] = "utility-science-multiplier",
+    ["space-science-pack"] = "space-science-multiplier",
+    ["metallurgic-science-pack"] = "metallurgic-science-multiplier",
+    ["electromagnetic-science-pack"] = "electromagnetic-science-multiplier",
+    ["agricultural-science-pack"] = "agricultural-science-multiplier",
+    ["cryogenic-science-pack"] = "cryogenic-science-multiplier",
+    ["promethium-science-pack"] = "promethium-science-multiplier",
+}
+
+-- optimization step: remove translations for multipliers that are 1.0 (default)
+for pack_item, multiplier_key in pairs(science_pack_multiplier_translation) do
+    local multiplier = science_pack_multipliers[multiplier_key];
+    if multiplier == 1.0 then
+        science_pack_multiplier_translation[pack_item] = nil;
+    end
+end
 
 function as_set(table)
     local set = {}
@@ -133,7 +190,15 @@ for name, technology in pairs(data.raw.technology) do
         multiplier = multiply(multiplier, planet_discovery_research_multiplier);
     end
 
-    -- TODO: science pack multiplier
+    -- science pack multiplier (flat, not ingredient-based)
+    for _, ingredient in pairs(technology.unit.ingredients) do
+        local ingredient_multiplier_id = science_pack_multiplier_translation[ingredient[1]];
+
+        if ingredient_multiplier_id ~= nil then
+            local pack_multiplier = science_pack_multipliers[ingredient_multiplier_id];
+            multiplier = multiply(multiplier, pack_multiplier);
+        end
+    end
 
 -- debug printing
     if (technology.unit) then
