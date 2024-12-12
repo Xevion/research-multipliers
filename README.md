@@ -75,7 +75,7 @@ Multipliers are applied in a specific order, and the last one applied is the one
 1. **Global** multipliers
 2. **Pack** multipliers.
    - Applies per-pack in this order:
-     ![Automation](./.assets/Automation.png) ![Logistic](./.assets/Logistic.png) ![Military](./.assets/Military.png) ![Chemical](./.assets/Chemical.png) ![Production](./.assets/Production.png) ![Utility](./.assets/Utility.png) ![Space](./.assets/Space.png) ![Metallurgic](./.assets/Metallurgic.png) ![Electromagnetic](./.assets/Electromagnetic.png) ![Agricultural](./.assets/Agricultural.png) ![Cryogenic](./.assets/Cryogenic.png) ![Promethium](./.assets/Promethium.png)
+     ![Automation][automation-icon] ![Logistic][logistic-icon] ![Military][military-icon] ![Chemical][chemical-icon] ![Production][production-icon] ![Utility][utility-icon] ![Space][space-icon] ![Metallurgic][metallurgic-icon] ![Electromagnetic][electromagnetic-icon] ![Agricultural][agricultural-icon] ![Cryogenic][cryogenic-icon] ![Promethium][promethium-icon]
 3. **Category** multipliers
    - **Essential**
    - **Interplanetary**
@@ -95,6 +95,18 @@ Categories are the way this mod groups technologies together for easier configur
   - This does not include the 'finite' level upgrade technologies, such as inserter capacity, transport belt capacity, or level 1-6 of worker robot speed.
   - I may consider adding on an option to include these in the future.
 
+[automation-icon]: ./.assets/Automation.png
+[logistic-icon]: ./.assets/Logistic.png
+[military-icon]: ./.assets/Military.png
+[chemical-icon]: ./.assets/Chemical.png
+[production-icon]: ./.assets/Production.png
+[utility-icon]: ./.assets/Utility.png
+[space-icon]: ./.assets/Space.png
+[metallurgic-icon]: ./.assets/Metallurgic.png
+[electromagnetic-icon]: ./.assets/Electromagnetic.png
+[agricultural-icon]: ./.assets/Agricultural.png
+[cryogenic-icon]: ./.assets/Cryogenic.png
+[promethium-icon]: ./.assets/Promethium.png
 [factorio-mods-page]: https://mods.factorio.com/mod/research-multipliers
 [factorio-download-count-badge]: https://img.shields.io/badge/dynamic/json?color=orange&label=Factorio&query=downloads_count&suffix=%20downloads&url=https%3A%2F%2Fmods.factorio.com%2Fapi%2Fmods%2Fresearch-multipliers&style=flat
 [github-latest-release]: https://github.com/Xevion/research-multipliers/releases/
