@@ -1,0 +1,7 @@
+---------------------------------------------------------------------------------------------------
+Version: 0.1.0
+Date: 12. 12. 2024
+  Major Features:
+    - Initial release.
+    - Global, Essential, Interplanetary & Infinite Research Multipliers
+    - Science Pack Research Multipliers
