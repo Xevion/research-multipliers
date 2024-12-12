@@ -6,8 +6,16 @@ local planet_discovery_research_multiplier = settings.startup["planet-discovery-
 
 local multiplier_mode = "override";
 
+function as_set(table)
+    local set = {}
+    for _, v in pairs(table) do
+        set[v] = true
+    end
+    return set
+end
+
 -- as defined by Factorio's technology tree; yes, some of this is redundant as they're trigger-based, but I would rather be technically correct
-local essential_research = {
+local essential_research = as_set({
     "automation-science-pack",
     "logistic-science-pack",
     "military-science-pack",
@@ -25,7 +33,7 @@ local essential_research = {
     "planet-discovery-aquilo",
     "cryogenic-science-pack",
     "promethium-science-pack",
-};
+});
 
 -- used for 'pack' multiplier mode
 local science_packs = {
@@ -44,21 +52,26 @@ local science_packs = {
 }
 
 -- used for detecting interplanetary research
-local interplanetary_science_packs = {
+local interplanetary_science_packs = as_set({
     "metallurgic-science-pack",
     "electromagnetic-science-pack",
     "agricultural-science-pack",
     "cryogenic-science-pack",
     "promethium-science-pack",
-}
+})
 
-function is_essential_research(name)
-    for _, essential_name in pairs(essential_research) do
-        if (name == essential_name) then
-            return true;
+function table.contains(table, element)
+    for _, value in pairs(table) do
+        if value == element then
+        return true
         end
     end
-    return false;
+    return false
+end
+  
+
+function is_essential_research(name)
+    return essential_research[name] == true;
 end
 
 -- infinite research generally has a finite number of defined 'levels', ones that don't have a formula. this function does not account for them.
@@ -66,7 +79,13 @@ function is_infinite_research(name)
     return data.raw.technology[name].unit.count == nil;
 end
 
+-- 
 function is_interplanetary_research(name)
+    for _, ingredient in pairs(data.raw.technology[name].unit.ingredients) do
+        if interplanetary_science_packs[ingredient[1]] then
+            return true;
+        end
+    end
     return false;
 end
 
