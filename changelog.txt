@@ -1,4 +1,5 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.1.1
 Date: 04. 16. 2025
   Bugfixes:
     - Fixed rare issue improper TechnologyUnit objects in other mods would cause a NPE crash.
