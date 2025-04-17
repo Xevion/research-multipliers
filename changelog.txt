@@ -1,4 +1,10 @@
 ---------------------------------------------------------------------------------------------------
+Date: 04. 16. 2025
+  Bugfixes:
+    - Fixed rare issue improper TechnologyUnit objects in other mods would cause a NPE crash.
+  Minor Features:
+    - Added error handling with 'xpcall' to prevent full crashes, instead logging exceptions.
+---------------------------------------------------------------------------------------------------
 Version: 0.1.0
 Date: 12. 12. 2024
   Major Features:
