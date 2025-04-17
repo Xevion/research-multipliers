@@ -1,4 +1,12 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.2.0
+Date: 2025-04-17
+  Features:
+    - version 0.1.1 release
+  Bugfixes:
+    - extra type conformity check for TechnologyUnit to prevent unexpected NPEs
+    - update .releaserc, use 'master' branch, reformat to proper JSON
+---------------------------------------------------------------------------------------------------
 Version: 0.1.1
 Date: 04. 16. 2025
   Bugfixes:
