@@ -136,9 +136,15 @@ function is_infinite_research(name)
     return data.raw.technology[name].unit.count == nil;
 end
 
--- 
+-- This function expects that the technology exists, and follows the TechnologyUnit type specification properly
 function is_interplanetary_research(name)
-    for _, ingredient in pairs(data.raw.technology[name].unit.ingredients) do
+    local technology = data.raw.technology[name];
+
+    if technology.unit == nil then
+        return false;
+    end
+
+    for _, ingredient in pairs(technology.unit.ingredients) do
         if interplanetary_science_packs[ingredient[1]] then
             return true;
         end
@@ -161,10 +167,13 @@ function multiply(current, next)
     end
 end
 
-for name, technology in pairs(data.raw.technology) do
-    -- skip trigger technology
+function calculate(name, technology)
+    -- Skip trigger technology, or technologies that don't properly provide a `unit`, `unit.ingredients`, or `unit.count` property
     if (technology.research_trigger ~= nil) then
-        goto continue;
+        return;
+    elseif (technology.unit == nil or technology.unit.ingredients == nil) then
+        log("Skipping non-trigger technology \"" ..
+            name .. "\" because it doesn't properly define a unit, it's ingredients, and/or a count.")
     end
 
     -- default to the global multiplier
@@ -213,10 +222,10 @@ for name, technology in pairs(data.raw.technology) do
 
     -- don't apply multiplier if it would do nothing
     if (multiplier == 1) then
-        goto continue;
+        return
     elseif (multiplier <= 0) then
         log("Multiplier is less than 0, skipping " .. name .. " (" .. multiplier .. ")")
-        goto continue;
+        return
     end
 
     -- Multiplier has been calculated, apply it
@@ -237,6 +246,10 @@ for name, technology in pairs(data.raw.technology) do
             technology.unit.count = technology.unit.count*multiplier;
         end
     end
+end
 
-    ::continue::
+for name, technology in pairs(data.raw.technology) do
+    xpcall(calculate, function(err)
+        log("Error in technology " .. name .. ": " .. err)
+    end, name, technology)
 end
