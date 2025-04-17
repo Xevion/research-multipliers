@@ -1,22 +1,14 @@
 ---------------------------------------------------------------------------------------------------
 Version: 0.2.0
 Date: 2025-04-17
-  Features:
-    - version 0.1.1 release
   Bugfixes:
-    - extra type conformity check for TechnologyUnit to prevent unexpected NPEs
-    - update .releaserc, use 'master' branch, reformat to proper JSON
----------------------------------------------------------------------------------------------------
-Version: 0.1.1
-Date: 04. 16. 2025
-  Bugfixes:
-    - Fixed rare issue improper TechnologyUnit objects in other mods would cause a NPE crash.
+    - fixed rare issue improper TechnologyUnit objects in other mods would cause a NPE crash
   Minor Features:
-    - Added error handling with 'xpcall' to prevent full crashes, instead logging exceptions.
+    - added error handling with 'xpcall' to prevent full crashes, instead logging exceptions
 ---------------------------------------------------------------------------------------------------
 Version: 0.1.0
-Date: 12. 12. 2024
+Date: 2024-12-12
   Major Features:
-    - Initial release.
-    - Global, Essential, Interplanetary & Infinite Research Multipliers
-    - Science Pack Research Multipliers
+    - initial release
+    - added Global, Essential, Interplanetary & Infinite Research Multipliers
+    - added Science Pack Research Multipliers
