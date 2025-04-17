@@ -5,7 +5,7 @@ permissions: write-all
 on:
   push:
     branches:
-      - main # Change to the correct one upon release, master
+      - master
 
 jobs:
   release:
