@@ -120,12 +120,11 @@ local interplanetary_science_packs = as_set({
 function table.contains(table, element)
     for _, value in pairs(table) do
         if value == element then
-        return true
+            return true
         end
     end
     return false
 end
-  
 
 function is_essential_research(name)
     return essential_research[name] == true;
@@ -149,6 +148,7 @@ function is_interplanetary_research(name)
             return true;
         end
     end
+
     return false;
 end
 
@@ -209,7 +209,7 @@ function calculate(name, technology)
         end
     end
 
--- debug printing
+    -- debug printing
     if (technology.unit) then
         if (technology.unit.count ~= nil) then
             log(name .. " : " .. technology.unit.count .. " -> x" .. multiplier)
@@ -241,9 +241,9 @@ function calculate(name, technology)
     else
         -- simple count
         if (multiplier < 1) then
-            technology.unit.count = math.max(math.ceil(technology.unit.count*multiplier), 1)
+            technology.unit.count = math.max(math.ceil(technology.unit.count * multiplier), 1)
         else
-            technology.unit.count = technology.unit.count*multiplier;
+            technology.unit.count = technology.unit.count * multiplier;
         end
     end
 end
